@@ -1,13 +1,357 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<!-- Add CSS at the head of HTML file -->
-    <link rel="stylesheet" href="./css/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maekawa's Quorum-Based Mutual Exclusion</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    
 </head>
 <body>
-		<!-- Your code goes here-->
+    <div class="app-container">
+        <header class="header">
+            <h1>
+                Maekawa's Mutual Exclusion
+                <div class="status-indicator"></div>
+            </h1>
+            <div style="font-size: 0.9em; opacity: 0.9;">
+                Quorum-Based Critical Section Access
+            </div>
+        </header>
 
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
+        <div class="controls-panel">
+            <div class="control-section">
+                <h3>Network Configuration</h3>
+                <div class="control-group">
+                    <h4>System Parameters</h4>
+                    <div class="slider-container">
+                        <label>Number of Participants: <span class="slider-value" id="nodeCount">9</span></label>
+                        <input type="range" id="nodeSlider" min="4" max="16" value="9">
+                    </div>
+                    <div class="slider-container">
+                        <label>Quorum Size (√n): <span class="slider-value" id="quorumSize">3</span></label>
+                        <input type="range" id="quorumSlider" min="2" max="6" value="3" disabled>
+                    </div>
+                    <div class="slider-container">
+                        <label>Animation Speed: <span class="slider-value" id="animationSpeed">1x</span></label>
+                        <input type="range" id="speedSlider" min="0.25" max="3" step="0.25" value="1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Critical Section Access</h3>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="requestCriticalSection()">� Request CS Access</button>
+                    <button class="btn btn-secondary" onclick="releaseCriticalSection()">� Release CS</button>
+                    <button class="btn btn-secondary" onclick="resetSimulation()">🔄 Reset System</button>
+                </div>
+                <div class="participant-selector">
+                    <label>Select Requesting Participant:</label>
+                    <select id="participantSelector">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Deadlock Prevention</h3>
+                <div class="button-group">
+                    <button class="btn btn-warning" onclick="simulateDeadlock()">⚠️ Simulate Deadlock</button>
+                    <button class="btn btn-success" onclick="resolveDeadlock()">� Resolve Deadlock</button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Failure Scenarios</h3>
+                <div class="button-group">
+                    <button class="btn btn-danger" onclick="simulateNodeFailure()">💥 Random Node Failure</button>
+                    <button class="btn btn-success" onclick="recoverNodes()">🔧 Recover All Nodes</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="experiment-area">
+            <div id="visualization"></div>
+            <button class="info-btn" id="infoBtn" onclick="showInfoModal()" title="Help & Information (F1)">ⓘ</button>
+            <div class="floating-message" id="messageBox"></div>
+            <div class="floating-legend">
+                <h4>Node States</h4>
+                <div class="legend-item">
+                    <div class="legend-color node-healthy"></div>
+                    <span>Available Node</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-requesting"></div>
+                    <span>Requesting CS</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-voting"></div>
+                    <span>Voting on Request</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-in-cs"></div>
+                    <span>In Critical Section</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-failed"></div>
+                    <span>Failed Node</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-locked"></div>
+                    <span>Locked/Waiting</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="observations-panel">
+            <div class="status-section">
+                <h4>Activity Logs</h4>
+                <div class="logs" id="logContainer">
+                    <div class="log-entry info">[INFO] Maekawa's algorithm initialized</div>
+                    <div class="log-entry info">[INFO] Quorum sets constructed with √n size</div>
+                </div>
+            </div>
+
+            <div class="status-section">
+                <h4>System Status</h4>
+                <div class="stat-item">
+                    <span class="stat-label">Active Participants</span>
+                    <span class="stat-value" id="activeNodes">9</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Failed Participants</span>
+                    <span class="stat-value" id="failedNodes">0</span>
+                </div>
+                <div class="stat-item active">
+                    <span class="stat-label">In Critical Section</span>
+                    <span class="stat-value" id="currentInCS">None</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">CS Status</span>
+                    <span class="stat-value" id="csStatus">
+                        <span class="status-indicator status-ready">Available</span>
+                    </span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Deadlock Status</span>
+                    <span class="stat-value" id="deadlockStatus">None</span>
+                </div>
+            </div>
+
+            <div class="status-section">
+                <h4>Mutual Exclusion Details</h4>
+                <div class="stat-item">
+                    <span class="stat-label">Current Requester</span>
+                    <span class="stat-value" id="currentRequester">None</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Votes Received</span>
+                    <span class="stat-value" id="votesReceived">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Votes Needed</span>
+                    <span class="stat-value" id="votesNeeded">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Request Timestamp</span>
+                    <span class="stat-value" id="requestTimestamp">-</span>
+                </div>
+            </div>
+
+            <div class="status-section">
+                <h4>Algorithm Metrics</h4>
+                <div class="stat-item">
+                    <span class="stat-label">Total Messages</span>
+                    <span class="stat-value" id="totalMessages">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">CS Entries</span>
+                    <span class="stat-value" id="csEntries">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Deadlock Events</span>
+                    <span class="stat-value" id="deadlockEvents">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Failed Requests</span>
+                    <span class="stat-value" id="failedRequests">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Portrait Orientation Overlay -->
+    <div class="rotate-device-overlay">
+        <div class="rotate-icon">📱➡️📲</div>
+        <h2>Please Rotate Your Device</h2>
+        <p>For the best experience, please rotate your device to landscape mode to view this Maekawa's mutual exclusion simulation.</p>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal-overlay" id="infoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔒 Maekawa's Quorum-Based Mutual Exclusion - User Guide</h2>
+                <button class="modal-close" onclick="hideInfoModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-section">
+                    <h3>🎯 Overview</h3>
+                    <p>This simulation demonstrates Maekawa's algorithm for distributed mutual exclusion using quorum-based voting. Each participant must obtain votes from its quorum set before accessing the critical section.</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>🖱️ Interactive Controls</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <strong>🔧 Network Configuration:</strong>
+                            <ul>
+                                <li><strong>Participants Slider:</strong> Adjust the number of nodes (4-16)</li>
+                                <li><strong>Quorum Size:</strong> Automatically calculated as √n</li>
+                                <li><strong>Animation Speed:</strong> Control simulation speed (0.25x - 3x)</li>
+                            </ul>
+                        </div>
+                        <div class="control-item">
+                            <strong>🔐 Critical Section Controls:</strong>
+                            <ul>
+                                <li><strong>Request CS Access:</strong> Selected participant requests critical section</li>
+                                <li><strong>Release CS:</strong> Current owner releases critical section</li>
+                                <li><strong>Reset System:</strong> Reset all participants to initial state</li>
+                                <li><strong>Participant Selector:</strong> Choose which node requests access</li>
+                            </ul>
+                        </div>
+                        <div class="control-item">
+                            <strong>⚠️ Deadlock Management:</strong>
+                            <ul>
+                                <li><strong>Simulate Deadlock:</strong> Create multiple simultaneous requests</li>
+                                <li><strong>Resolve Deadlock:</strong> Use timestamp-based resolution</li>
+                            </ul>
+                        </div>
+                        <div class="control-item">
+                            <strong>💥 Failure Scenarios:</strong>
+                            <ul>
+                                <li><strong>Random Node Failure:</strong> Simulate participant failure</li>
+                                <li><strong>Recover All Nodes:</strong> Restore failed participants</li>
+                                <li><strong>Click Failed Nodes:</strong> Manually recover individual nodes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>🎨 Visual Legend</h3>
+                    <div class="legend-grid">
+                        <div class="legend-item-info">
+                            <div class="legend-color-info" style="background: #10b981;"></div>
+                            <span><strong>Available Node:</strong> Ready to participate in voting</span>
+                        </div>
+                        <div class="legend-item-info">
+                            <div class="legend-color-info" style="background: #3b82f6; border: 2px solid #1e40af;"></div>
+                            <span><strong>Requesting CS:</strong> Sending requests to quorum members</span>
+                        </div>
+                        <div class="legend-item-info">
+                            <div class="legend-color-info" style="background: #8b5cf6;"></div>
+                            <span><strong>Voting:</strong> Processing vote request from another node</span>
+                        </div>
+                        <div class="legend-item-info">
+                            <div class="legend-color-info" style="background: #f59e0b; border: 2px solid #d97706;"></div>
+                            <span><strong>In Critical Section:</strong> Currently accessing shared resource</span>
+                        </div>
+                        <div class="legend-item-info">
+                            <div class="legend-color-info" style="background: #ef4444;"></div>
+                            <span><strong>Failed Node:</strong> Unavailable for voting or requests</span>
+                        </div>
+                        <div class="legend-item-info">
+                            <div class="legend-color-info" style="background: #ef4444; border: 2px solid #dc2626;"></div>
+                            <span><strong>Locked/Waiting:</strong> Involved in deadlock scenario</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>🔄 Algorithm Process</h3>
+                    <div class="process-steps">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <div class="step-content">
+                                <strong>Request Phase:</strong> Participant sends REQUEST messages to all members in its quorum set
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <div class="step-content">
+                                <strong>Voting Phase:</strong> Quorum members vote YES if they haven't voted for someone else, NO otherwise
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <div class="step-content">
+                                <strong>Access Decision:</strong> If all quorum members vote YES, participant enters critical section
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <div class="step-content">
+                                <strong>Release Phase:</strong> After completion, participant sends RELEASE messages to quorum members
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>📊 Statistics Panel</h3>
+                    <p>Monitor real-time metrics including:</p>
+                    <ul>
+                        <li><strong>Active/Failed Participants:</strong> System health status</li>
+                        <li><strong>Critical Section Status:</strong> Current owner and availability</li>
+                        <li><strong>Request Details:</strong> Voting progress and timestamps</li>
+                        <li><strong>Algorithm Metrics:</strong> Messages sent, entries, deadlocks, failures</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>🔧 Interactive Features</h3>
+                    <ul>
+                        <li><strong>Click on Nodes:</strong> View quorum membership or recover failed nodes</li>
+                        <li><strong>Drag Nodes:</strong> Reposition participants in the visualization</li>
+                        <li><strong>Animated Links:</strong> Follow message flow during quorum communication</li>
+                        <li><strong>Real-time Logs:</strong> Track all algorithm events and decisions</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>⌨️ Keyboard Shortcuts</h3>
+                    <div class="shortcuts-grid">
+                        <div class="shortcut-item">
+                            <kbd>F1</kbd> <span>Show/Hide this help</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl + H</kbd> <span>Toggle help modal</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Escape</kbd> <span>Close modal</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>R</kbd> <span>Reset simulation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>🎓 Educational Notes</h3>
+                    <div class="educational-notes">
+                        <p><strong>Quorum Properties:</strong> Each quorum set has size √n and any two quorum sets intersect in at least one node, ensuring mutual exclusion.</p>
+                        <p><strong>Deadlock Prevention:</strong> Maekawa's algorithm can experience deadlocks when multiple requests occur simultaneously. The simulation uses timestamp-based ordering for resolution.</p>
+                        <p><strong>Fault Tolerance:</strong> Node failures can prevent quorum formation. The algorithm gracefully handles failures but may need manual recovery.</p>
+                        <p><strong>Message Complexity:</strong> Each request requires 2√n messages (request + release), making it more efficient than other distributed algorithms.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>
