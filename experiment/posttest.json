@@ -1,39 +1,101 @@
-{
-  "version": 2.0,
-  "questions": [
+[
     {
-      "question": "This is a Sample Question 1?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+        "question": "What is the primary purpose of a quorum-based mutual exclusion algorithm?",
+        "options": [
+            "To ensure that only one process can access a critical section at a time.",
+            "To allow multiple processes to access a critical section simultaneously.",
+            "To reduce the number of messages exchanged.",
+            "To eliminate the need for a central coordinator."
+        ],
+        "answer": "To ensure that only one process can access a critical section at a time.",
+        "difficulty": "easy"
     },
     {
-      "question": "This is a Sample Question 2?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
+        "question": "In Maekawa's algorithm, a process sends a request message to which set of processes?",
+        "options": [
+            "All processes in its own quorum.",
+            "All processes in the system.",
+            "A randomly selected subset of processes.",
+            "The central coordinator."
+        ],
+        "answer": "All processes in its own quorum.",
+        "difficulty": "easy"
+    },
+    {
+        "question": "A process can enter the critical section only after it receives a grant message from which set of processes?",
+        "options": [
+            "All processes in its quorum.",
+            "A majority of processes in the system.",
+            "At least one other process.",
+            "The central coordinator."
+        ],
+        "answer": "All processes in its quorum.",
+        "difficulty": "easy"
+    },
+    {
+        "question": "What is the main advantage of Maekawa's algorithm over Lamport's and Ricart-Agrawala's algorithms?",
+        "options": [
+            "It has a lower message complexity.",
+            "It is simpler to implement.",
+            "It is completely fault-tolerant.",
+            "It does not require timestamps."
+        ],
+        "answer": "It has a lower message complexity.",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "The condition that any two quorums have a non-empty intersection ensures which property of mutual exclusion?",
+        "options": [
+            "Safety",
+            "Liveness",
+            "Fairness",
+            "Freedom from starvation"
+        ],
+        "answer": "Safety",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "If a process fails in Maekawa's algorithm, what is the potential consequence?",
+        "options": [
+            "The system may deadlock.",
+            "The critical section may be accessed by multiple processes simultaneously.",
+            "The failed process will be automatically removed from all quorums.",
+            "The algorithm will continue to function correctly without any issues."
+        ],
+        "answer": "The system may deadlock.",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "How does Maekawa's algorithm handle concurrent requests for the critical section?",
+        "options": [
+            "It uses timestamps to order the requests.",
+            "It grants access on a first-come, first-served basis.",
+            "It can lead to deadlock if not handled carefully.",
+            "It uses a central coordinator to resolve conflicts."
+        ],
+        "answer": "It can lead to deadlock if not handled carefully.",
+        "difficulty": "advanced"
+    },
+    {
+        "question": "To build a fault-tolerant version of Maekawa's algorithm, what modification could be made?",
+        "options": [
+            "Increase the size of the quorums.",
+            "Use a dynamic quorum system.",
+            "Add a failure detector and a recovery mechanism.",
+            "All of the above."
+        ],
+        "answer": "All of the above.",
+        "difficulty": "advanced"
+    },
+    {
+        "question": "Compared to a centralized mutual exclusion algorithm, Maekawa's algorithm offers better:",
+        "options": [
+            "Scalability and reliability.",
+            "Simplicity and ease of implementation.",
+            "Performance in low-contention scenarios.",
+            "Guaranteed freedom from deadlock."
+        ],
+        "answer": "Scalability and reliability.",
+        "difficulty": "advanced"
     }
-  ]
-}
+]
