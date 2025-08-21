@@ -1,39 +1,101 @@
-{
-  "version": 2.0,
-  "questions": [
+[
     {
-      "question": "This is a Sample Question 1?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+        "question": "What is mutual exclusion in distributed systems?",
+        "options": [
+            "A protocol to ensure that no two processes access a shared resource at the same time.",
+            "A method for sharing resources among all processes.",
+            "A way to increase the speed of computation.",
+            "A technique for data replication."
+        ],
+        "answer": "A protocol to ensure that no two processes access a shared resource at the same time.",
+        "difficulty": "easy"
     },
     {
-      "question": "This is a Sample Question 2?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
+        "question": "What is a quorum in the context of distributed systems?",
+        "options": [
+            "A subset of processes in a system.",
+            "The total number of processes.",
+            "A specific type of message.",
+            "A failure detection mechanism."
+        ],
+        "answer": "A subset of processes in a system.",
+        "difficulty": "easy"
+    },
+    {
+        "question": "Which of the following is a requirement for mutual exclusion?",
+        "options": [
+            "Freedom from deadlock",
+            "High-speed network",
+            "Large memory",
+            "All of the above"
+        ],
+        "answer": "Freedom from deadlock",
+        "difficulty": "easy"
+    },
+    {
+        "question": "In Maekawa's algorithm, what is the relationship between any two quorums?",
+        "options": [
+            "They must have a non-empty intersection.",
+            "They must be disjoint.",
+            "They must be of the same size.",
+            "They must include the same process."
+        ],
+        "answer": "They must have a non-empty intersection.",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "What is the size of each quorum in Maekawa's algorithm, where N is the number of processes?",
+        "options": [
+            "sqrt(N)",
+            "N/2",
+            "N-1",
+            "log(N)"
+        ],
+        "answer": "sqrt(N)",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "How many messages are required per critical section entry in Maekawa's algorithm?",
+        "options": [
+            "3 * sqrt(N)",
+            "2 * (N-1)",
+            "N",
+            "log(N)"
+        ],
+        "answer": "3 * sqrt(N)",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "What is a potential problem with Maekawa's algorithm?",
+        "options": [
+            "Deadlock",
+            "High message complexity",
+            "Low scalability",
+            "It only works for a small number of processes."
+        ],
+        "answer": "Deadlock",
+        "difficulty": "advanced"
+    },
+    {
+        "question": "How can the deadlock problem in Maekawa's algorithm be resolved?",
+        "options": [
+            "By using a priority-based scheme for requests.",
+            "By increasing the quorum size.",
+            "By reducing the number of processes.",
+            "By using a central coordinator."
+        ],
+        "answer": "By using a priority-based scheme for requests.",
+        "difficulty": "advanced"
+    },
+    {
+        "question": "Maekawa's algorithm is an example of which type of mutual exclusion algorithm?",
+        "options": [
+            "Non-token-based",
+            "Token-based",
+            "Centralized",
+            "Hierarchical"
+        ],
+        "answer": "Non-token-based",
+        "difficulty": "advanced"
     }
-  ]
-}
+]
