@@ -1,101 +1,155 @@
 [
     {
         "question": "What is mutual exclusion in distributed systems?",
-        "options": [
-            "A protocol to ensure that no two processes access a shared resource at the same time.",
-            "A method for sharing resources among all processes.",
-            "A way to increase the speed of computation.",
-            "A technique for data replication."
-        ],
-        "answer": "A protocol to ensure that no two processes access a shared resource at the same time.",
+        "answers": {
+            "a": "A protocol to ensure that no two processes access a shared resource at the same time.",
+            "b": "A method for sharing resources among all processes.",
+            "c": "A way to increase the speed of computation.",
+            "d": "A technique for data replication."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. Mutual exclusion ensures exclusive access to a shared resource.",
+            "b": "Incorrect. This describes resource sharing, not mutual exclusion.",
+            "c": "Incorrect. While related to performance, this is not the definition of mutual exclusion.",
+            "d": "Incorrect. This is a technique for data availability and fault tolerance."
+        },
         "difficulty": "easy"
     },
     {
         "question": "What is a quorum in the context of distributed systems?",
-        "options": [
-            "A subset of processes in a system.",
-            "The total number of processes.",
-            "A specific type of message.",
-            "A failure detection mechanism."
-        ],
-        "answer": "A subset of processes in a system.",
+        "answers": {
+            "a": "A subset of processes in a system.",
+            "b": "The total number of processes.",
+            "c": "A specific type of message.",
+            "d": "A failure detection mechanism."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. A quorum is a subset of processes whose cooperation is required to perform an operation.",
+            "b": "Incorrect. A quorum is a subset, not the total number.",
+            "c": "Incorrect. A quorum is a set of processes, not a message type.",
+            "d": "Incorrect. This is a different concept in distributed systems."
+        },
         "difficulty": "easy"
     },
     {
         "question": "Which of the following is a requirement for mutual exclusion?",
-        "options": [
-            "Freedom from deadlock",
-            "High-speed network",
-            "Large memory",
-            "All of the above"
-        ],
-        "answer": "Freedom from deadlock",
+        "answers": {
+            "a": "Freedom from deadlock",
+            "b": "High-speed network",
+            "c": "Large memory",
+            "d": "All of the above"
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. A mutual exclusion algorithm must ensure that processes do not get stuck in a deadlock state.",
+            "b": "Incorrect. While helpful, a high-speed network is not a fundamental requirement.",
+            "c": "Incorrect. Memory requirements depend on the algorithm, but it's not a general requirement.",
+            "d": "Incorrect. Only freedom from deadlock is a core requirement."
+        },
         "difficulty": "easy"
     },
     {
         "question": "In Maekawa's algorithm, what is the relationship between any two quorums?",
-        "options": [
-            "They must have a non-empty intersection.",
-            "They must be disjoint.",
-            "They must be of the same size.",
-            "They must include the same process."
-        ],
-        "answer": "They must have a non-empty intersection.",
+        "answers": {
+            "a": "They must have a non-empty intersection.",
+            "b": "They must be disjoint.",
+            "c": "They must be of the same size.",
+            "d": "They must include the same process."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. The non-empty intersection property is essential for ensuring safety in Maekawa's algorithm.",
+            "b": "Incorrect. If quorums were disjoint, two processes could enter the critical section simultaneously.",
+            "c": "Incorrect. While quorums are typically of the same size, this is not the defining relationship for correctness.",
+            "d": "Incorrect. This is not a requirement."
+        },
         "difficulty": "intermediate"
     },
     {
         "question": "What is the size of each quorum in Maekawa's algorithm, where N is the number of processes?",
-        "options": [
-            "sqrt(N)",
-            "N/2",
-            "N-1",
-            "log(N)"
-        ],
-        "answer": "sqrt(N)",
+        "answers": {
+            "a": "sqrt(N)",
+            "b": "N/2",
+            "c": "N-1",
+            "d": "log(N)"
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. The quorum size is approximately the square root of the number of processes.",
+            "b": "Incorrect. This is not the quorum size in Maekawa's algorithm.",
+            "c": "Incorrect. This is the number of processes a process communicates with in Ricart-Agrawala's algorithm.",
+            "d": "Incorrect. This is not the quorum size in Maekawa's algorithm."
+        },
         "difficulty": "intermediate"
     },
     {
         "question": "How many messages are required per critical section entry in Maekawa's algorithm?",
-        "options": [
-            "3 * sqrt(N)",
-            "2 * (N-1)",
-            "N",
-            "log(N)"
-        ],
-        "answer": "3 * sqrt(N)",
+        "answers": {
+            "a": "3 * sqrt(N)",
+            "b": "2 * (N-1)",
+            "c": "N",
+            "d": "log(N)"
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. It requires sqrt(N) requests, sqrt(N) grants, and sqrt(N) release messages.",
+            "b": "Incorrect. This is the message complexity of Ricart-Agrawala's algorithm.",
+            "c": "Incorrect. This is not the message complexity of Maekawa's algorithm.",
+            "d": "Incorrect. This is not the message complexity of Maekawa's algorithm."
+        },
         "difficulty": "intermediate"
     },
     {
         "question": "What is a potential problem with Maekawa's algorithm?",
-        "options": [
-            "Deadlock",
-            "High message complexity",
-            "Low scalability",
-            "It only works for a small number of processes."
-        ],
-        "answer": "Deadlock",
+        "answers": {
+            "a": "Deadlock",
+            "b": "High message complexity",
+            "c": "Low scalability",
+            "d": "It only works for a small number of processes."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. The basic version of Maekawa's algorithm is prone to deadlock.",
+            "b": "Incorrect. Its message complexity is one of its main advantages.",
+            "c": "Incorrect. It is considered more scalable than many other algorithms.",
+            "d": "Incorrect. It is designed for distributed systems of various sizes."
+        },
         "difficulty": "advanced"
     },
     {
         "question": "How can the deadlock problem in Maekawa's algorithm be resolved?",
-        "options": [
-            "By using a priority-based scheme for requests.",
-            "By increasing the quorum size.",
-            "By reducing the number of processes.",
-            "By using a central coordinator."
-        ],
-        "answer": "By using a priority-based scheme for requests.",
+        "answers": {
+            "a": "By using a priority-based scheme for requests.",
+            "b": "By increasing the quorum size.",
+            "c": "By reducing the number of processes.",
+            "d": "By using a central coordinator."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. Using timestamps to establish priority can help resolve deadlocks.",
+            "b": "Incorrect. This would not resolve the deadlock issue.",
+            "c": "Incorrect. This is not a solution to the deadlock problem.",
+            "d": "Incorrect. This would change the algorithm to a centralized one."
+        },
         "difficulty": "advanced"
     },
     {
         "question": "Maekawa's algorithm is an example of which type of mutual exclusion algorithm?",
-        "options": [
-            "Non-token-based",
-            "Token-based",
-            "Centralized",
-            "Hierarchical"
-        ],
-        "answer": "Non-token-based",
+        "answers": {
+            "a": "Non-token-based",
+            "b": "Token-based",
+            "c": "Centralized",
+            "d": "Hierarchical"
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. It is a permission-based (non-token-based) algorithm.",
+            "b": "Incorrect. Token-based algorithms use a single token to grant access.",
+            "c": "Incorrect. It is a decentralized algorithm.",
+            "d": "Incorrect. It does not have a hierarchical structure."
+        },
         "difficulty": "advanced"
     }
 ]
