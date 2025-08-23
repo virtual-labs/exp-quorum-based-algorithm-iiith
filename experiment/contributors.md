@@ -1,5 +1,3 @@
-## Maekawa's Quorum-Based Mutual Exclusion Algorithm
-
 ### Subject Matter Experts
 | SNo. | Name | Email | Institute | ID |
 | :---: | :---: | :---: | :---: | :---: |

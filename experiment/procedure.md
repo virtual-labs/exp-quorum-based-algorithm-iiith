@@ -1,5 +1,3 @@
-## Maekawa's Quorum-Based Mutual Exclusion Algorithm
-
 ### Controls
 The experiment will have the following controls:
 - **Number of Processes (N):** The total number of processes in the distributed system. This can be varied to observe the effect on the number of messages and the likelihood of deadlock.

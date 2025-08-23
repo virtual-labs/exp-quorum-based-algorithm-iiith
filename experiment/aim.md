@@ -1,3 +1,1 @@
-## Maekawa's Quorum-Based Mutual Exclusion Algorithm
-
 ### To understand and implement Maekawa's algorithm for mutual exclusion in a distributed system. The experiment aims to demonstrate how a quorum-based approach can ensure that only one process accesses a critical section at a time, while minimizing the number of messages exchanged.
