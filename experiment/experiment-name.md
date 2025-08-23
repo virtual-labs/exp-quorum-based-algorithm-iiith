@@ -1,1 +1,1 @@
-<!-- ## Maekawa's Quorum-Based Mutual Exclusion Algorithm -->
+## Maekawa's Quorum-Based Mutual Exclusion Algorithm

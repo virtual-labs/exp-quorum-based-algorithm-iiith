@@ -1,4 +1,6 @@
-[
+{
+    "version": 2.0,
+    "questions": [
     {
         "question": "What is the primary purpose of a quorum-based mutual exclusion algorithm?",
         "answers": {
@@ -153,3 +155,4 @@
         "difficulty": "advanced"
     }
 ]
+}

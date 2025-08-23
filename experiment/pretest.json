@@ -1,4 +1,6 @@
-[
+{
+    "version": 2.0,
+    "questions": [
     {
         "question": "What is mutual exclusion in distributed systems?",
         "answers": {
@@ -153,3 +155,4 @@
         "difficulty": "advanced"
     }
 ]
+}
