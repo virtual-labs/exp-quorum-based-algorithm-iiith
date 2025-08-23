@@ -16,7 +16,7 @@
             "c": "Incorrect. While related to performance, this is not the definition of mutual exclusion.",
             "d": "Incorrect. This is a technique for data availability and fault tolerance."
         },
-        "difficulty": "easy"
+        "difficulty": "beginner"
     },
     {
         "question": "What is a quorum in the context of distributed systems?",
@@ -33,7 +33,7 @@
             "c": "Incorrect. A quorum is a set of processes, not a message type.",
             "d": "Incorrect. This is a different concept in distributed systems."
         },
-        "difficulty": "easy"
+        "difficulty": "beginner"
     },
     {
         "question": "Which of the following is a requirement for mutual exclusion?",
@@ -50,7 +50,7 @@
             "c": "Incorrect. Memory requirements depend on the algorithm, but it's not a general requirement.",
             "d": "Incorrect. Only freedom from deadlock is a core requirement."
         },
-        "difficulty": "easy"
+        "difficulty": "beginner"
     },
     {
         "question": "In Maekawa's algorithm, what is the relationship between any two quorums?",
