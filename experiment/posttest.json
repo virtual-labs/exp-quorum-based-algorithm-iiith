@@ -16,7 +16,7 @@
             "c": "Incorrect. While some algorithms are more efficient, this is not the primary purpose.",
             "d": "Incorrect. This is a characteristic of decentralized algorithms, but not the primary purpose."
         },
-        "difficulty": "easy"
+        "difficulty": "beginner"
     },
     {
         "question": "In Maekawa's algorithm, a process sends a request message to which set of processes?",
@@ -33,7 +33,7 @@
             "c": "Incorrect. The quorum is a specific, not random, set of processes.",
             "d": "Incorrect. Maekawa's algorithm is decentralized."
         },
-        "difficulty": "easy"
+        "difficulty": "beginner"
     },
     {
         "question": "A process can enter the critical section only after it receives a grant message from which set of processes?",
@@ -50,7 +50,7 @@
             "c": "Incorrect. Permission from one process is not sufficient.",
             "d": "Incorrect. There is no central coordinator."
         },
-        "difficulty": "easy"
+        "difficulty": "beginner"
     },
     {
         "question": "What is the main advantage of Maekawa's algorithm over Lamport's and Ricart-Agrawala's algorithms?",

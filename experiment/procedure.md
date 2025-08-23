@@ -1,10 +1,10 @@
-### Controls
+### Procedure
+
 The experiment will have the following controls:
 - **Number of Processes (N):** The total number of processes in the distributed system. This can be varied to observe the effect on the number of messages and the likelihood of deadlock.
 - **Quorum Size (K):** The size of each quorum, which is approximately sqrt(N).
 - **Critical Section Execution Time:** The amount of time a process spends in the critical section.
 
-### Procedure
 1. **Initialization:**
    - Start N processes in the distributed system.
    - For each process `Pi`, define its quorum `Si`. The quorums must satisfy the condition that for any two processes `Pi` and `Pj`, their quorums `Si` and `Sj` have a non-empty intersection. A common way to construct these quorums is to arrange the processes in a sqrt(N) x sqrt(N) grid. The quorum for a process is the union of its row and column in the grid.
