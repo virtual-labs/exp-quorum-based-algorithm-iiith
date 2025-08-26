@@ -1,4 +1,3 @@
-### Theory
 In distributed systems, mutual exclusion is a fundamental problem that ensures that multiple processes do not access a shared resource (critical section) simultaneously. Various algorithms have been developed to address this problem, which can be broadly categorized into token-based and non-token-based algorithms. Maekawa's algorithm is a non-token-based, decentralized algorithm that uses the concept of quorums to achieve mutual exclusion.
 
 #### The Concept of Quorums

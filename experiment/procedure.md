@@ -1,5 +1,3 @@
-### Procedure
-
 The experiment will have the following controls:
 - **Number of Processes (N):** The total number of processes in the distributed system. This can be varied to observe the effect on the number of messages and the likelihood of deadlock.
 - **Quorum Size (K):** The size of each quorum, which is approximately sqrt(N).
