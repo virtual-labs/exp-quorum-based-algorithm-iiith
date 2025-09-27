@@ -29,9 +29,9 @@
                         <label>Number of Participants: <span class="slider-value" id="nodeCount">9</span></label>
                         <input type="range" id="nodeSlider" min="4" max="16" value="9">
                     </div>
-                    <div class="slider-container">
-                        <label>Quorum Size (√n): <span class="slider-value" id="quorumSize">3</span></label>
-                        <input type="range" id="quorumSlider" min="2" max="6" value="3" disabled>
+                    <div class="display-container">
+                        <label>Quorum Size (√n): <span class="display-value" id="quorumSize">3</span></label>
+                        <div class="info-text">Automatically calculated as √n</div>
                     </div>
                     <div class="slider-container">
                         <label>Animation Speed: <span class="slider-value" id="animationSpeed">1x</span></label>
@@ -41,10 +41,29 @@
             </div>
 
             <div class="control-section">
+                <h3>How to Use This Experiment</h3>
+                <div class="usage-guide">
+                    <div class="step-info">
+                        <strong>1. Configure Network:</strong> Adjust the number of participants (4-16). Quorum size is automatically calculated as √n.
+                    </div>
+                    <div class="step-info">
+                        <strong>2. Request Critical Section:</strong> Select a participant and click "Request CS Access" to see the voting process.
+                    </div>
+                    <div class="step-info">
+                        <strong>3. Observe Algorithm:</strong> Watch how REQUEST → REPLY → RELEASE messages flow through the quorum.
+                    </div>
+                    <div class="step-info">
+                        <strong>4. Test Deadlock:</strong> Use "Simulate Deadlock" to see what happens when multiple participants request simultaneously.
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
                 <h3>Critical Section Access</h3>
                 <div class="button-group">
-                    <button class="btn btn-primary" onclick="requestCriticalSection()">� Request CS Access</button>
-                    <button class="btn btn-secondary" onclick="releaseCriticalSection()">� Release CS</button>
+                    <button class="btn btn-primary" onclick="requestCriticalSection()">🚀 Request CS Access</button>
+                    <button class="btn btn-secondary" onclick="releaseCriticalSection()">🔓 Release CS</button>
+                    <button class="btn btn-warning" onclick="simulateDeadlock()">⚠️ Simulate Deadlock</button>
                     <button class="btn btn-secondary" onclick="resetSimulation()">🔄 Reset System</button>
                 </div>
                 <div class="participant-selector">
@@ -54,28 +73,15 @@
                     </select>
                 </div>
             </div>
-
-            <div class="control-section">
-                <h3>Deadlock Prevention</h3>
-                <div class="button-group">
-                    <button class="btn btn-warning" onclick="simulateDeadlock()">⚠️ Simulate Deadlock</button>
-                    <button class="btn btn-success" onclick="resolveDeadlock()">� Resolve Deadlock</button>
-                </div>
-            </div>
-
-            <div class="control-section">
-                <h3>Failure Scenarios</h3>
-                <div class="button-group">
-                    <button class="btn btn-danger" onclick="simulateNodeFailure()">💥 Random Node Failure</button>
-                    <button class="btn btn-success" onclick="recoverNodes()">🔧 Recover All Nodes</button>
-                </div>
-            </div>
         </div>
 
         <div class="experiment-area">
             <div id="visualization"></div>
             <button class="info-btn" id="infoBtn" onclick="showInfoModal()" title="Help & Information (F1)">ⓘ</button>
             <div class="floating-message" id="messageBox"></div>
+            <div class="quorum-tooltip" id="quorumTooltip">
+                <div class="tooltip-content"></div>
+            </div>
             <div class="floating-legend">
                 <h4>Node States</h4>
                 <div class="legend-item">
@@ -93,10 +99,6 @@
                 <div class="legend-item">
                     <div class="legend-color node-in-cs"></div>
                     <span>In Critical Section</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color node-failed"></div>
-                    <span>Failed Node</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color node-locked"></div>
@@ -119,10 +121,6 @@
                 <div class="stat-item">
                     <span class="stat-label">Active Participants</span>
                     <span class="stat-value" id="activeNodes">9</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Failed Participants</span>
-                    <span class="stat-value" id="failedNodes">0</span>
                 </div>
                 <div class="stat-item active">
                     <span class="stat-label">In Critical Section</span>
@@ -199,7 +197,16 @@
             <div class="modal-body">
                 <div class="info-section">
                     <h3>🎯 Overview</h3>
-                    <p>This simulation demonstrates Maekawa's algorithm for distributed mutual exclusion using quorum-based voting. Each participant must obtain votes from its quorum set before accessing the critical section.</p>
+                    <p>This simulation demonstrates Maekawa's algorithm for distributed mutual exclusion using quorum-based voting. Each participant must obtain votes from its quorum set (size √n) before accessing the critical section.</p>
+                    
+                    <h4>🔬 Experiment Cases to Try:</h4>
+                    <ul>
+                        <li><strong>Normal Operation:</strong> Request CS access with different participants to see the 3-phase protocol (REQUEST → REPLY → RELEASE)</li>
+                        <li><strong>Quorum Intersection:</strong> Hover over nodes to see how each participant's quorum overlaps with others (ensuring mutual exclusion)</li>
+                        <li><strong>Deadlock Scenario:</strong> Use "Simulate Deadlock" to see what happens when multiple participants request simultaneously and create circular waiting</li>
+                        <li><strong>Different Network Sizes:</strong> Change participant count (4-16) to observe how quorum size √n affects the algorithm's behavior</li>
+                        <li><strong>Message Complexity:</strong> Watch the logs to see exactly 3√n messages per critical section access</li>
+                    </ul>
                 </div>
 
                 <div class="info-section">
@@ -216,25 +223,11 @@
                         <div class="control-item">
                             <strong>🔐 Critical Section Controls:</strong>
                             <ul>
-                                <li><strong>Request CS Access:</strong> Selected participant requests critical section</li>
-                                <li><strong>Release CS:</strong> Current owner releases critical section</li>
+                                <li><strong>Request CS Access:</strong> Selected participant requests critical section - watch the 3-phase protocol</li>
+                                <li><strong>Release CS:</strong> Current owner releases critical section - triggers RELEASE messages</li>
+                                <li><strong>Simulate Deadlock:</strong> Creates a realistic deadlock scenario with detailed explanation</li>
                                 <li><strong>Reset System:</strong> Reset all participants to initial state</li>
                                 <li><strong>Participant Selector:</strong> Choose which node requests access</li>
-                            </ul>
-                        </div>
-                        <div class="control-item">
-                            <strong>⚠️ Deadlock Management:</strong>
-                            <ul>
-                                <li><strong>Simulate Deadlock:</strong> Create multiple simultaneous requests</li>
-                                <li><strong>Resolve Deadlock:</strong> Use timestamp-based resolution</li>
-                            </ul>
-                        </div>
-                        <div class="control-item">
-                            <strong>💥 Failure Scenarios:</strong>
-                            <ul>
-                                <li><strong>Random Node Failure:</strong> Simulate participant failure</li>
-                                <li><strong>Recover All Nodes:</strong> Restore failed participants</li>
-                                <li><strong>Click Failed Nodes:</strong> Manually recover individual nodes</li>
                             </ul>
                         </div>
                     </div>
@@ -258,10 +251,6 @@
                         <div class="legend-item-info">
                             <div class="legend-color-info" style="background: #f59e0b; border: 2px solid #d97706;"></div>
                             <span><strong>In Critical Section:</strong> Currently accessing shared resource</span>
-                        </div>
-                        <div class="legend-item-info">
-                            <div class="legend-color-info" style="background: #ef4444;"></div>
-                            <span><strong>Failed Node:</strong> Unavailable for voting or requests</span>
                         </div>
                         <div class="legend-item-info">
                             <div class="legend-color-info" style="background: #ef4444; border: 2px solid #dc2626;"></div>
@@ -304,17 +293,17 @@
                     <h3>📊 Statistics Panel</h3>
                     <p>Monitor real-time metrics including:</p>
                     <ul>
-                        <li><strong>Active/Failed Participants:</strong> System health status</li>
+                        <li><strong>Active Participants:</strong> System health status</li>
                         <li><strong>Critical Section Status:</strong> Current owner and availability</li>
                         <li><strong>Request Details:</strong> Voting progress and timestamps</li>
-                        <li><strong>Algorithm Metrics:</strong> Messages sent, entries, deadlocks, failures</li>
+                        <li><strong>Algorithm Metrics:</strong> Messages sent, entries, and deadlocks</li>
                     </ul>
                 </div>
 
                 <div class="info-section">
                     <h3>🔧 Interactive Features</h3>
                     <ul>
-                        <li><strong>Click on Nodes:</strong> View quorum membership or recover failed nodes</li>
+                        <li><strong>Click on Nodes:</strong> View quorum membership</li>
                         <li><strong>Drag Nodes:</strong> Reposition participants in the visualization</li>
                         <li><strong>Animated Links:</strong> Follow message flow during quorum communication</li>
                         <li><strong>Real-time Logs:</strong> Track all algorithm events and decisions</li>
@@ -343,9 +332,9 @@
                     <h3>🎓 Educational Notes</h3>
                     <div class="educational-notes">
                         <p><strong>Quorum Properties:</strong> Each quorum set has size √n and any two quorum sets intersect in at least one node, ensuring mutual exclusion.</p>
-                        <p><strong>Deadlock Prevention:</strong> Maekawa's algorithm can experience deadlocks when multiple requests occur simultaneously. The simulation uses timestamp-based ordering for resolution.</p>
-                        <p><strong>Fault Tolerance:</strong> Node failures can prevent quorum formation. The algorithm gracefully handles failures but may need manual recovery.</p>
-                        <p><strong>Message Complexity:</strong> Each request requires 2√n messages (request + release), making it more efficient than other distributed algorithms.</p>
+                        <p><strong>Deadlock Detection:</strong> Maekawa's algorithm can experience deadlocks. This simulation detects circular wait conditions and flags them as deadlocks.</p>
+                        <p><strong>Message Complexity:</strong> Each request requires exactly 3√n messages: √n REQUEST + √n REPLY + √n RELEASE messages.</p>
+                        <p><strong>Algorithm Properties:</strong> Satisfies ∀i ∀j : i ≠ j :: Ri ⋂ Rj ≠ ∅ (intersection property) and |Ri| = √N for optimal performance.</p>
                     </div>
                 </div>
             </div>

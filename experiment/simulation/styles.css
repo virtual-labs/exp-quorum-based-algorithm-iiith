@@ -170,6 +170,56 @@
             margin-bottom: 15px;
         }
 
+        .display-container {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .display-container label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .display-value {
+            font-weight: 700;
+            color: #1e40af;
+            font-size: 1.1rem;
+        }
+
+        .info-text {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        .usage-guide {
+            background: #f0f9ff;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .step-info {
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .step-info:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-info strong {
+            color: #1e40af;
+        }
+
         .slider-container label {
             display: block;
             margin-bottom: 8px;
@@ -807,10 +857,6 @@
             background: #10b981;
         }
 
-        .legend-color.node-failed {
-            background: #ef4444;
-        }
-
         .legend-color.node-requesting {
             background: #3b82f6;
             border: 2px solid #1e40af;
@@ -843,10 +889,6 @@
 
         .node-healthy {
             fill: #10b981;
-        }
-
-        .node-failed {
-            fill: #ef4444;
         }
 
         .node-requesting {
@@ -1172,3 +1214,26 @@
                 display: none !important;
             }
         }
+
+/* Quorum Tooltip Styles */
+.quorum-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.quorum-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
