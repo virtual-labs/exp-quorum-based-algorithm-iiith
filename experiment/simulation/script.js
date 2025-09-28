@@ -59,10 +59,7 @@ class MaekawaSimulation {
     setupEventListeners() {
         document.getElementById('nodeSlider').addEventListener('input', (e) => {
             this.participantCount = parseInt(e.target.value);
-            // Update quorum size to be exactly √N
-            this.quorumSize = Math.round(Math.sqrt(this.participantCount));
             document.getElementById('nodeCount').textContent = this.participantCount;
-            document.getElementById('quorumSize').textContent = this.quorumSize;
             this.createNetwork();
         });
 
@@ -128,42 +125,55 @@ class MaekawaSimulation {
         this.log('Quorum sets constructed with size √n = ' + this.quorumSize, 'info');
     }
 
-    constructQuorumSets() {
-        // Simple quorum construction with exactly √N nodes per quorum
+        constructQuorumSets() {
+        // This function uses a grid-based approach to guarantee intersection.
+        // A node's quorum is the union of its entire row and column in a logical grid.
         this.quorumSets = [];
+        const n = this.participantCount;
         
-        // Update the display to show current quorum size
-        document.getElementById('quorumSize').textContent = this.quorumSize;
-        
-        // For each participant, create a quorum of exactly √N nodes
-        for (let i = 0; i < this.participantCount; i++) {
-            const quorumSet = [];
+        // Calculate the grid dimension 'k'. e.g., for N=9, k=3.
+        const k = Math.ceil(Math.sqrt(n));
+
+        // Iterate through each participant to build its quorum.
+        for (let i = 0; i < n; i++) {
+            const quorumSet = new Set();
             
-            // Add the participant itself first
-            quorumSet.push(i);
-            
-            // Add other participants to reach exactly √N nodes
-            let added = 1;
-            let nodeIndex = (i + 1) % this.participantCount;
-            
-            while (added < this.quorumSize && added < this.participantCount) {
-                if (nodeIndex !== i) { // Don't add self again
-                    quorumSet.push(nodeIndex);
-                    added++;
+            // Calculate the participant's position (row, col) in the logical grid.
+            const row = Math.floor(i / k);
+            const col = i % k;
+
+            // Add all nodes in the same row to the quorum set.
+            for (let j = 0; j < k; j++) {
+                const nodeInRow = row * k + j;
+                if (nodeInRow < n) { // Check handles non-perfect squares like N=12
+                    quorumSet.add(nodeInRow);
                 }
-                nodeIndex = (nodeIndex + 1) % this.participantCount;
+            }
+
+            // Add all nodes in the same column to the quorum set.
+            for (let j = 0; j < k; j++) {
+                const nodeInCol = j * k + col;
+                if (nodeInCol < n) {
+                    quorumSet.add(nodeInCol);
+                }
             }
             
-            // Sort the quorum set for consistency
-            quorumSet.sort((a, b) => a - b);
-            this.quorumSets.push(quorumSet);
+            // Convert the Set to a sorted array and store it.
+            this.quorumSets.push(Array.from(quorumSet).sort((a, b) => a - b));
         }
 
-        // Log quorum sets for debugging
-        this.log(`Simple quorum sets created with √N = ${this.quorumSize} nodes per quorum`, 'info');
-        this.log(`Each quorum has exactly ${this.quorumSize} members`, 'info');
+        // Update the internal quorumSize variable for other parts of the code.
+        // This size is now a RESULT of the construction, not an input.
+        if (this.quorumSets.length > 0) {
+            this.quorumSize = this.quorumSets[0].length;
+        }
+
+        document.getElementById('quorumSize').textContent = this.quorumSize;
+
+
+        this.log(`Grid-based quorum sets created (grid size: ${k}x${k})`, 'info');
+        // This verification will now pass successfully every time.
         this.verifyQuorumIntersection();
-        this.verifyQuorumSizes();
     }
 
     createQuorumLinks() {
