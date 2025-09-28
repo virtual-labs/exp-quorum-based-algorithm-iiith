@@ -26,7 +26,7 @@ The algorithm works as follows:
 5.  **Receiving a Release:** When a process `Pj` receives a `RELEASE(i)` message from `Pi`, it can then grant permission to the next process in its request queue.
 
 ### Message Complexity
-The message complexity of Maekawa's algorithm is `3 * K` messages per critical section entry: `K` for the `REQUEST` messages, `K` for the `GRANT` messages, and `K` for the `RELEASE` messages. Since `K` is approximately `sqrt(N)`, the message complexity is `3 * sqrt(N)`, which is a significant improvement over algorithms like Lamport's (`3 * (N-1)`) and Ricart-Agrawala's (`2 * (N-1)`).
+The message complexity of Maekawa's algorithm is 3 * K messages per critical section entry: K for the REQUEST messages, K for the GRANT messages, and K for the RELEASE messages. In the grid-based construction, since K is 2 * sqrt(N) - 1, the message complexity is 3 * (2 * sqrt(N) - 1). This O(sqrt(N)) complexity is a significant improvement over algorithms like Lamport's (3 * (N-1)) and Ricart-Agrawala's (2 * (N-1)).
 
 ### Deadlock
 A potential issue with Maekawa's algorithm is the possibility of deadlock. A deadlock can occur when multiple processes are waiting for each other to release a grant. For example, process `Pi` might be waiting for a grant from `Pj`, while `Pj` is waiting for a grant from `Pk`, and `Pk` is waiting for a grant from `Pi`.

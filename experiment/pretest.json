@@ -70,38 +70,38 @@
         "difficulty": "intermediate"
     },
     {
-        "question": "What is the size of each quorum in Maekawa's algorithm, where N is the number of processes?",
-        "answers": {
-            "a": "sqrt(N)",
-            "b": "N/2",
-            "c": "N-1",
-            "d": "log(N)"
-        },
-        "correctAnswer": "a",
-        "explanations": {
-            "a": "Correct. The quorum size is approximately the square root of the number of processes.",
-            "b": "Incorrect. This is not the quorum size in Maekawa's algorithm.",
-            "c": "Incorrect. This is the number of processes a process communicates with in Ricart-Agrawala's algorithm.",
-            "d": "Incorrect. This is not the quorum size in Maekawa's algorithm."
-        },
-        "difficulty": "intermediate"
+    "question": "In a grid-based implementation of Maekawa's algorithm with N processes, what is the approximate size of each quorum?",
+    "answers": {
+        "a": "2 * sqrt(N) - 1",
+        "b": "N/2",
+        "c": "sqrt(N)",
+        "d": "N-1"
+    },
+    "correctAnswer": "a",
+    "explanations": {
+        "a": "Correct. The quorum is the union of a node's row and column in a logical grid, resulting in a size of approximately 2 * sqrt(N) - 1.",
+        "b": "Incorrect. This is not the quorum size in Maekawa's algorithm.",
+        "c": "Incorrect. This size is only achievable with more complex constructions like finite projective planes, not a general grid algorithm.",
+        "d": "Incorrect. This is related to the Ricart-Agrawala algorithm."
+    },
+    "difficulty": "intermediate"
     },
     {
-        "question": "How many messages are required per critical section entry in Maekawa's algorithm?",
-        "answers": {
-            "a": "3 * sqrt(N)",
-            "b": "2 * (N-1)",
-            "c": "N",
-            "d": "log(N)"
-        },
-        "correctAnswer": "a",
-        "explanations": {
-            "a": "Correct. It requires sqrt(N) requests, sqrt(N) grants, and sqrt(N) release messages.",
-            "b": "Incorrect. This is the message complexity of Ricart-Agrawala's algorithm.",
-            "c": "Incorrect. This is not the message complexity of Maekawa's algorithm.",
-            "d": "Incorrect. This is not the message complexity of Maekawa's algorithm."
-        },
-        "difficulty": "intermediate"
+    "question": "What is the message complexity per critical section entry in a grid-based Maekawa's algorithm?",
+    "answers": {
+        "a": "O(sqrt(N))",
+        "b": "O(N)",
+        "c": "O(N^2)",
+        "d": "O(log(N))"
+    },
+    "correctAnswer": "a",
+    "explanations": {
+        "a": "Correct. The complexity is 3*K, where K is ~2*sqrt(N)-1. This is still on the order of O(sqrt(N)), making it more efficient than O(N) algorithms.",
+        "b": "Incorrect. The primary advantage is improving upon O(N) complexity.",
+        "c": "Incorrect. This would be very inefficient.",
+        "d": "Incorrect. This is not the message complexity of Maekawa's algorithm."
+    },
+    "difficulty": "intermediate"
     },
     {
         "question": "What is a potential problem with Maekawa's algorithm?",
