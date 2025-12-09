@@ -1,37 +1,60 @@
-The experiment will have the following controls:
-- **Number of Processes (N):** The total number of processes in the distributed system. This can be varied to observe the effect on the number of messages and the likelihood of deadlock.
-- **Quorum Size (K):** The size of each quorum, which is approximately sqrt(N).
-- **Critical Section Execution Time:** The amount of time a process spends in the critical section.
+### Experiment Controls
+- **Number of Processes (N):** Total processes in the distributed system. Vary this to observe impact on message count and deadlock probability.
+- **Quorum Size (K):** Approximately sqrt(N), determining how many processes must approve each request.
+- **Critical Section Execution Time:** Duration a process occupies the critical section, affecting contention levels.
 
-1. **Initialization:**
+### Phase 1: System Setup
+
+1. **Initialize Processes:**
    - Start N processes in the distributed system.
-   - For each process `Pi`, define its quorum `Si`. The quorums must satisfy the condition that for any two processes `Pi` and `Pj`, their quorums `Si` and `Sj` have a non-empty intersection. A common way to construct these quorums is to arrange the processes in a sqrt(N) x sqrt(N) grid. The quorum for a process is the union of its row and column in the grid.
+   - Arrange processes in a sqrt(N) x sqrt(N) grid to facilitate quorum construction.
 
-2. **Requesting the Critical Section:**
-   - When a process `Pi` wants to enter the critical section, it sends a `REQUEST` message to all processes in its quorum `Si`.
+2. **Define Quorums:**
+   - For each process `Pi`, define its quorum `Si` as the union of its row and column in the grid.
+   - *Why:* This ensures any two quorums share at least one process (intersection property), which prevents simultaneous critical section access.
 
-3. **Receiving a Request:**
-   - When a process `Pj` receives a `REQUEST` message from `Pi`, it sends a `GRANT` message to `Pi` if `Pj` has not sent a `GRANT` message to any other process since it last received a `RELEASE` message. Otherwise, `Pj` queues the request from `Pi`.
+### Phase 2: Critical Section Access Protocol
 
-4. **Entering the Critical Section:**
-   - Process `Pi` can enter the critical section only after it has received a `GRANT` message from all processes in its quorum `Si`.
+3. **Request Entry:**
+   - When process `Pi` needs the critical section, it sends `REQUEST` messages to all processes in its quorum `Si`.
+   - *Why:* Pi must obtain permission from its entire quorum to guarantee mutual exclusion.
 
-5. **Releasing the Critical Section:**
-   - After exiting the critical section, process `Pi` sends a `RELEASE` message to all processes in its quorum `Si`.
+4. **Process Incoming Requests:**
+   - When `Pj` receives a `REQUEST` from `Pi`:
+     - If `Pj` hasn't granted permission since its last `RELEASE`, send `GRANT` to `Pi`.
+     - Otherwise, queue the request.
+   - *Why:* Each process can grant to only one requester at a time, enforcing the mutual exclusion constraint.
 
-6. **Receiving a Release:**
-   - When a process `Pj` receives a `RELEASE` message from `Pi`, it can now send a `GRANT` message to the next process in its queue.
+5. **Enter Critical Section:**
+   - Process `Pi` enters the critical section only after receiving `GRANT` from all processes in `Si`.
+   - *Why:* Full quorum approval ensures no other process can simultaneously obtain permission.
 
-7. **Deadlock Handling (Advanced):**
-   - To handle deadlocks, implement a priority-based scheme. When a process `Pj` receives a request from `Pi` but has already granted access to another process `Pk`, it compares the timestamps of the requests from `Pi` and `Pk`. If `Pi`'s request is earlier, `Pj` can send an `INQUIRE` message to `Pk` to see if it has received all its grants. If not, `Pk` can send a `RELINQUISH` message back to `Pj`, allowing `Pj` to grant access to `Pi`.
+6. **Release and Notify:**
+   - After exiting, `Pi` sends `RELEASE` messages to all processes in its quorum.
+   - *Why:* This frees quorum members to grant permission to waiting processes.
 
-8. **Data Collection:**
-   - For each run of the experiment, record the following:
-     - The number of messages sent per critical section entry.
-     - The waiting time for each process to enter the critical section.
-     - Whether a deadlock occurred.
+7. **Grant Queued Requests:**
+   - When `Pj` receives `RELEASE` from `Pi`, it sends `GRANT` to the next process in its queue.
 
-9. **Analysis:**
-   - Analyze the collected data to understand the performance of Maekawa's algorithm.
-   - Compare the message complexity with other algorithms like Lamport's and Ricart-Agrawala's.
-   - Observe the conditions under which deadlocks are more likely to occur.
+### Phase 3: Deadlock Prevention (Advanced)
+
+8. **Implement Priority-Based Resolution:**
+   - When `Pj` receives a request from `Pi` but has already granted to `Pk`:
+     - Compare timestamps: if `Pi`'s request is earlier (higher priority), send `INQUIRE` to `Pk`.
+     - If `Pk` hasn't received all grants yet, it sends `RELINQUISH` to `Pj`.
+     - `Pj` then grants to `Pi` instead.
+   - *Why:* This breaks circular wait chains by allowing lower-priority requests to yield to higher-priority ones.
+
+### Phase 4: Monitoring and Analysis
+
+9. **Collect Performance Metrics:**
+   - For each critical section entry, record:
+     - Total messages sent (REQUEST + GRANT + RELEASE).
+     - Waiting time per process.
+     - Deadlock occurrences (if any).
+
+10. **Analyze Results:**
+    - Calculate average message complexity and verify it approaches 3 * sqrt(N).
+    - Compare with Lamport's (3 * (N-1)) and Ricart-Agrawala's (2 * (N-1)) algorithms.
+    - Identify patterns in deadlock occurrence relative to N and concurrent request frequency.
+    - *Why:* This validates the theoretical O(sqrt(N)) complexity and demonstrates the algorithm's efficiency advantages.
