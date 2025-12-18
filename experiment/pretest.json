@@ -1,39 +1,158 @@
 {
-  "version": 2.0,
-  "questions": [
+    "version": 2.0,
+    "questions": [
     {
-      "question": "This is a Sample Question 1?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+        "question": "What is mutual exclusion in distributed systems?",
+        "answers": {
+            "a": "A protocol to ensure that no two processes access a shared resource at the same time.",
+            "b": "A method for sharing resources among all processes.",
+            "c": "A way to increase the speed of computation.",
+            "d": "A technique for data replication."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. Mutual exclusion ensures exclusive access to a shared resource.",
+            "b": "Incorrect. This describes resource sharing, not mutual exclusion.",
+            "c": "Incorrect. While related to performance, this is not the definition of mutual exclusion.",
+            "d": "Incorrect. This is a technique for data availability and fault tolerance."
+        },
+        "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
+        "question": "What is a quorum in the context of distributed systems?",
+        "answers": {
+            "a": "A subset of processes in a system.",
+            "b": "The total number of processes.",
+            "c": "A specific type of message.",
+            "d": "A failure detection mechanism."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. A quorum is a subset of processes whose cooperation is required to perform an operation.",
+            "b": "Incorrect. A quorum is a subset, not the total number.",
+            "c": "Incorrect. A quorum is a set of processes, not a message type.",
+            "d": "Incorrect. This is a different concept in distributed systems."
+        },
+        "difficulty": "beginner"
+    },
+    {
+        "question": "Which of the following is a requirement for mutual exclusion?",
+        "answers": {
+            "a": "Freedom from deadlock",
+            "b": "High-speed network",
+            "c": "Large memory",
+            "d": "All of the above"
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. A mutual exclusion algorithm must ensure that processes do not get stuck in a deadlock state.",
+            "b": "Incorrect. While helpful, a high-speed network is not a fundamental requirement.",
+            "c": "Incorrect. Memory requirements depend on the algorithm, but it's not a general requirement.",
+            "d": "Incorrect. Only freedom from deadlock is a core requirement."
+        },
+        "difficulty": "beginner"
+    },
+    {
+        "question": "In Maekawa's algorithm, what is the relationship between any two quorums?",
+        "answers": {
+            "a": "They must have a non-empty intersection.",
+            "b": "They must be disjoint.",
+            "c": "They must be of the same size.",
+            "d": "They must include the same process."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. The non-empty intersection property is essential for ensuring safety in Maekawa's algorithm.",
+            "b": "Incorrect. If quorums were disjoint, two processes could enter the critical section simultaneously.",
+            "c": "Incorrect. While quorums are typically of the same size, this is not the defining relationship for correctness.",
+            "d": "Incorrect. This is not a requirement."
+        },
+        "difficulty": "intermediate"
+    },
+    {
+    "question": "In a grid-based implementation of Maekawa's algorithm with N processes, what is the approximate size of each quorum?",
+    "answers": {
+        "a": "2 * sqrt(N) - 1",
+        "b": "N/2",
+        "c": "sqrt(N)",
+        "d": "N-1"
+    },
+    "correctAnswer": "a",
+    "explanations": {
+        "a": "Correct. The quorum is the union of a node's row and column in a logical grid, resulting in a size of approximately 2 * sqrt(N) - 1.",
+        "b": "Incorrect. This is not the quorum size in Maekawa's algorithm.",
+        "c": "Incorrect. This size is only achievable with more complex constructions like finite projective planes, not a general grid algorithm.",
+        "d": "Incorrect. This is related to the Ricart-Agrawala algorithm."
+    },
+    "difficulty": "intermediate"
+    },
+    {
+    "question": "What is the message complexity per critical section entry in a grid-based Maekawa's algorithm?",
+    "answers": {
+        "a": "O(sqrt(N))",
+        "b": "O(N)",
+        "c": "O(N^2)",
+        "d": "O(log(N))"
+    },
+    "correctAnswer": "a",
+    "explanations": {
+        "a": "Correct. The complexity is 3*K, where K is ~2*sqrt(N)-1. This is still on the order of O(sqrt(N)), making it more efficient than O(N) algorithms.",
+        "b": "Incorrect. The primary advantage is improving upon O(N) complexity.",
+        "c": "Incorrect. This would be very inefficient.",
+        "d": "Incorrect. This is not the message complexity of Maekawa's algorithm."
+    },
+    "difficulty": "intermediate"
+    },
+    {
+        "question": "What is a potential problem with Maekawa's algorithm?",
+        "answers": {
+            "a": "Deadlock",
+            "b": "High message complexity",
+            "c": "Low scalability",
+            "d": "It only works for a small number of processes."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. The basic version of Maekawa's algorithm is prone to deadlock.",
+            "b": "Incorrect. Its message complexity is one of its main advantages.",
+            "c": "Incorrect. It is considered more scalable than many other algorithms.",
+            "d": "Incorrect. It is designed for distributed systems of various sizes."
+        },
+        "difficulty": "advanced"
+    },
+    {
+        "question": "How can the deadlock problem in Maekawa's algorithm be resolved?",
+        "answers": {
+            "a": "By using a priority-based scheme for requests.",
+            "b": "By increasing the quorum size.",
+            "c": "By reducing the number of processes.",
+            "d": "By using a central coordinator."
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. Using timestamps to establish priority can help resolve deadlocks.",
+            "b": "Incorrect. This would not resolve the deadlock issue.",
+            "c": "Incorrect. This is not a solution to the deadlock problem.",
+            "d": "Incorrect. This would change the algorithm to a centralized one."
+        },
+        "difficulty": "advanced"
+    },
+    {
+        "question": "Maekawa's algorithm is an example of which type of mutual exclusion algorithm?",
+        "answers": {
+            "a": "Non-token-based",
+            "b": "Token-based",
+            "c": "Centralized",
+            "d": "Hierarchical"
+        },
+        "correctAnswer": "a",
+        "explanations": {
+            "a": "Correct. It is a permission-based (non-token-based) algorithm.",
+            "b": "Incorrect. Token-based algorithms use a single token to grant access.",
+            "c": "Incorrect. It is a decentralized algorithm.",
+            "d": "Incorrect. It does not have a hierarchical structure."
+        },
+        "difficulty": "advanced"
     }
-  ]
+]
 }

@@ -1,1 +1,1 @@
-## Experiment name
+## Maekawa's Quorum-Based Mutual Exclusion Algorithm
