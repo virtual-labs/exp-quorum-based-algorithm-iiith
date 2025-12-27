@@ -15,10 +15,23 @@
                 Maekawa's Mutual Exclusion
                 <div class="status-indicator"></div>
             </h1>
-            <div style="font-size: 0.9em; opacity: 0.9;">
+            <div class="header-subtitle">
                 Quorum-Based Critical Section Access
             </div>
         </header>
+
+        <!-- Mobile Navigation Tabs -->
+        <nav class="mobile-nav">
+            <button class="mobile-nav-btn" data-tab="controls" onclick="switchTab('controls')">
+                <span>🔧</span> <span class="nav-text">Controls</span>
+            </button>
+            <button class="mobile-nav-btn active" data-tab="visualization" onclick="switchTab('visualization')">
+                <span>📊</span> <span class="nav-text">Simulation</span>
+            </button>
+            <button class="mobile-nav-btn" data-tab="observations" onclick="switchTab('observations')">
+                <span>📋</span> <span class="nav-text">Logs</span>
+            </button>
+        </nav>
 
         <div class="controls-panel">
             <div class="control-section">
@@ -75,14 +88,46 @@
             </div>
         </div>
 
-        <div class="experiment-area">
+        <div class="experiment-area active">
             <div id="visualization"></div>
             <button class="info-btn" id="infoBtn" onclick="showInfoModal()" title="Help & Information (F1)">ⓘ</button>
             <div class="floating-message" id="messageBox"></div>
             <div class="quorum-tooltip" id="quorumTooltip">
                 <div class="tooltip-content"></div>
             </div>
+            
+            <!-- Desktop Legend -->
             <div class="floating-legend">
+                <h4>Node States</h4>
+                <div class="legend-item">
+                    <div class="legend-color node-healthy"></div>
+                    <span>Available Node</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-requesting"></div>
+                    <span>Requesting CS</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-voting"></div>
+                    <span>Voting on Request</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-in-cs"></div>
+                    <span>In Critical Section</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color node-locked"></div>
+                    <span>Locked/Waiting</span>
+                </div>
+            </div>
+            
+            <!-- Mobile Legend Toggle -->
+            <button class="mobile-legend-toggle" onclick="toggleMobileLegend()">
+                <span>🎨</span> Legend
+            </button>
+            
+            <!-- Mobile Legend -->
+            <div class="mobile-legend" id="mobileLegend">
                 <h4>Node States</h4>
                 <div class="legend-item">
                     <div class="legend-color node-healthy"></div>

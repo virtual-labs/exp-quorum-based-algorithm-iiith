@@ -9,7 +9,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #1a202c;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .app-container {
@@ -56,9 +56,51 @@
             animation: pulse 2s infinite;
         }
 
+        .header-subtitle {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        /* Mobile Navigation Tabs */
+        .mobile-nav {
+            display: none;
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            padding: 8px;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .mobile-nav-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .mobile-nav-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+        }
+
+        .mobile-nav-btn:hover:not(.active) {
+            background: #e2e8f0;
         }
 
         .controls-panel {
@@ -887,6 +929,17 @@
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
 
+        /* Mobile - larger nodes for easier touch */
+        @media (max-width: 768px) {
+            .node {
+                r: 28 !important;
+            }
+            
+            .node-label {
+                font-size: 12px;
+            }
+        }
+
         .node-healthy {
             fill: #10b981;
         }
@@ -990,83 +1043,144 @@
             border: 1px solid #fca5a5;
         }
 
+        /* ============================================
+           RESPONSIVE DESIGN - TABLET (max-width: 1200px)
+           ============================================ */
         @media (max-width: 1200px) {
             .app-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: 80px 1fr auto auto;
-                height: 100vh;
-                gap: 10px;
-                padding: 10px;
-            }
-            
-            .controls-panel {
-                height: 300px;
-                order: 2;
-            }
-            
-            .experiment-area {
-                order: 1;
-                min-height: 400px;
-            }
-            
-            .observations-panel {
-                height: 250px;
-                order: 3;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5em;
-            }
-            
-            .control-group {
+                grid-template-columns: 280px 1fr 300px;
+                gap: 12px;
                 padding: 12px;
             }
             
-            .btn {
-                padding: 8px 12px;
-                font-size: 12px;
-            }
-            
-            .stat-item {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-                gap: 4px;
-            }
-        }
-        
-        /* Mobile Landscape Support - Desktop-like Experience */
-        @media screen and (max-width: 968px) and (orientation: landscape) {
-            .app-container {
-                grid-template-columns: 280px 1fr 300px;
-                grid-template-rows: 60px 1fr;
-                gap: 10px;
-                padding: 10px;
-            }
-            
-            .header {
-                padding: 0 15px;
-            }
-            
             .header h1 {
-                font-size: 1.4em;
+                font-size: 1.6em;
             }
             
-            .controls-panel {
-                padding: 15px;
-                height: calc(100vh - 80px);
-            }
-            
+            .controls-panel,
             .observations-panel {
                 padding: 15px;
-                height: calc(100vh - 80px);
             }
             
             .control-section {
                 padding: 15px;
-                margin-bottom: 15px;
+            }
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN - SMALL TABLET (max-width: 1024px)
+           ============================================ */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 70px 1fr auto;
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            .header {
+                grid-column: 1 / -1;
+            }
+            
+            .experiment-area {
+                grid-column: 1 / -1;
+                min-height: 400px;
+                order: 1;
+            }
+            
+            .controls-panel {
+                height: auto;
+                max-height: 400px;
+                order: 2;
+            }
+            
+            .observations-panel {
+                height: auto;
+                max-height: 400px;
+                order: 3;
+            }
+            
+            .floating-legend {
+                display: none;
+            }
+            
+            .header-subtitle {
+                display: none;
+            }
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN - MOBILE (max-width: 768px)
+           ============================================ */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+            }
+            
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                height: auto;
+                min-height: 100vh;
+                gap: 10px;
+                padding: 10px;
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 12px 15px;
+                border-radius: 12px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .header h1 {
+                font-size: 1.3em;
+            }
+            
+            .header-subtitle {
+                display: block;
+                font-size: 0.75em;
+            }
+            
+            /* Show mobile navigation */
+            .mobile-nav {
+                display: flex;
+            }
+            
+            /* Panel visibility controlled by tabs */
+            .controls-panel,
+            .observations-panel {
+                display: none;
+                height: auto;
+                max-height: none;
+                padding: 15px;
+                border-radius: 12px;
+            }
+            
+            .controls-panel.active,
+            .observations-panel.active {
+                display: flex;
+            }
+            
+            .experiment-area {
+                min-height: 350px;
+                max-height: 450px;
+                border-radius: 12px;
+            }
+            
+            .experiment-area.active {
+                display: block;
+            }
+            
+            .experiment-area:not(.active) {
+                display: none;
+            }
+            
+            .control-section {
+                padding: 12px;
+                border-radius: 10px;
             }
             
             .control-section h3 {
@@ -1074,21 +1188,47 @@
                 margin-bottom: 12px;
             }
             
-            .btn {
-                padding: 10px 14px;
-                font-size: 0.8rem;
-                margin-bottom: 6px;
+            .control-group {
+                padding: 12px;
             }
             
-            .participant-selector select,
-            .slider-container input,
-            .slider-container label {
+            .control-group h4 {
+                font-size: 0.9em;
+            }
+            
+            .usage-guide {
+                padding: 12px;
+            }
+            
+            .step-info {
                 font-size: 0.8rem;
+            }
+            
+            .button-group {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            
+            .btn {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .participant-selector select {
+                padding: 10px;
+            }
+            
+            .status-section {
+                padding: 12px;
+            }
+            
+            .status-section h4 {
+                font-size: 0.95em;
             }
             
             .stat-item {
-                padding: 6px 10px;
-                margin-bottom: 6px;
+                padding: 8px 10px;
             }
             
             .stat-label {
@@ -1100,119 +1240,423 @@
             }
             
             .logs {
-                height: 300px;
+                height: 250px;
                 font-size: 0.75rem;
-            }
-            
-            .status-section {
                 padding: 12px;
             }
             
-            .status-section h4 {
-                font-size: 0.9em;
-                margin-bottom: 10px;
+            .log-entry {
+                padding: 5px 8px;
+                font-size: 0.7rem;
             }
             
-            /* Ensure experiment area uses full space */
-            .experiment-area {
-                min-height: calc(100vh - 80px);
-            }
-            
-            /* Adjust floating legend for mobile landscape */
+            /* Floating elements adjustments */
             .floating-legend {
-                top: 15px;
-                right: 15px;
-                padding: 12px;
-                min-width: 160px;
+                display: none;
             }
             
-            .floating-legend h4 {
+            .floating-message {
                 font-size: 0.8rem;
-                margin-bottom: 10px;
+                padding: 10px 16px;
+                max-width: 90%;
             }
             
-            .legend-item {
-                font-size: 0.75rem;
-                margin-bottom: 6px;
+            .info-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+                top: 10px;
+                right: 10px;
             }
             
-            .legend-color {
-                width: 12px;
-                height: 12px;
-                margin-right: 8px;
+            .quorum-tooltip {
+                font-size: 12px;
+                padding: 6px 10px;
+                max-width: 280px;
+                white-space: normal;
             }
         }
-        
-        /* Tablet Landscape - Slightly different layout */
-        @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+        /* ============================================
+           RESPONSIVE DESIGN - SMALL MOBILE (max-width: 480px)
+           ============================================ */
+        @media (max-width: 480px) {
             .app-container {
-                grid-template-columns: 300px 1fr 320px;
-                grid-template-rows: 70px 1fr;
-                gap: 12px;
-                padding: 12px;
+                padding: 8px;
+                gap: 8px;
+            }
+            
+            .header {
+                padding: 10px 12px;
             }
             
             .header h1 {
-                font-size: 1.6em;
+                font-size: 1.1em;
+            }
+            
+            .mobile-nav-btn {
+                padding: 10px 8px;
+                font-size: 0.75rem;
+            }
+            
+            .mobile-nav-btn span.nav-text {
+                display: none;
+            }
+            
+            .experiment-area {
+                min-height: 300px;
+                max-height: 380px;
+            }
+            
+            .control-section {
+                padding: 10px;
+            }
+            
+            .control-section h3 {
+                font-size: 0.9em;
+            }
+            
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                padding: 12px;
+            }
+            
+            .usage-guide {
+                display: none;
+            }
+            
+            .logs {
+                height: 200px;
+            }
+        }
+
+        /* ============================================
+           LANDSCAPE ORIENTATION SUPPORT
+           ============================================ */
+        @media screen and (max-width: 968px) and (orientation: landscape) {
+            .app-container {
+                grid-template-columns: 260px 1fr 280px;
+                grid-template-rows: 55px 1fr;
+                gap: 8px;
+                padding: 8px;
+                height: 100vh;
+                overflow: hidden;
+            }
+            
+            .header {
+                padding: 0 12px;
+            }
+            
+            .header h1 {
+                font-size: 1.2em;
+            }
+            
+            .mobile-nav {
+                display: none;
             }
             
             .controls-panel,
             .observations-panel {
-                height: calc(100vh - 94px);
+                display: flex !important;
+                height: calc(100vh - 71px);
+                padding: 10px;
+                overflow-y: auto;
+            }
+            
+            .experiment-area {
+                display: block !important;
+                min-height: auto;
+                max-height: none;
+            }
+            
+            .control-section {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .control-section h3 {
+                font-size: 0.9em;
+                margin-bottom: 8px;
+            }
+            
+            .control-group {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .btn {
+                padding: 8px 10px;
+                font-size: 0.75rem;
+                margin-bottom: 6px;
+            }
+            
+            .usage-guide {
+                display: none;
+            }
+            
+            .stat-item {
+                padding: 5px 8px;
+            }
+            
+            .stat-label {
+                font-size: 0.7em;
+            }
+            
+            .stat-value {
+                font-size: 0.75em;
+            }
+            
+            .logs {
+                height: 180px;
+                font-size: 0.7rem;
+            }
+            
+            .floating-legend {
+                display: block;
+                top: 10px;
+                right: 10px;
+                padding: 10px;
+                min-width: 140px;
+            }
+            
+            .floating-legend h4 {
+                font-size: 0.75rem;
+                margin-bottom: 8px;
+            }
+            
+            .legend-item {
+                font-size: 0.7rem;
+                margin-bottom: 5px;
+            }
+            
+            .legend-color {
+                width: 10px;
+                height: 10px;
+                margin-right: 6px;
             }
         }
         
-        /* Mobile Portrait Orientation Overlay */
-        .rotate-device-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 10000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .rotate-device-overlay .rotate-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: rotateAnimation 2s ease-in-out infinite;
-        }
-
-        .rotate-device-overlay h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .rotate-device-overlay p {
-            font-size: 1rem;
-            opacity: 0.9;
-            line-height: 1.5;
-            max-width: 300px;
-        }
-
-        @keyframes rotateAnimation {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-15deg); }
-            75% { transform: rotate(15deg); }
-        }
-
-        @media screen and (max-width: 768px) and (orientation: portrait) {
-            .rotate-device-overlay {
-                display: flex !important;
+        /* Tablet Landscape */
+        @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .app-container {
+                grid-template-columns: 280px 1fr 300px;
+                grid-template-rows: 60px 1fr;
+                gap: 10px;
+                padding: 10px;
             }
             
-            .app-container {
-                display: none !important;
+            .header h1 {
+                font-size: 1.4em;
             }
+            
+            .controls-panel,
+            .observations-panel {
+                height: calc(100vh - 80px);
+            }
+            
+            .floating-legend {
+                display: block;
+            }
+        }
+        
+        /* ============================================
+           MODAL RESPONSIVE STYLES
+           ============================================ */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                max-height: 85vh;
+                border-radius: 15px;
+            }
+            
+            .modal-header {
+                padding: 15px 20px;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.1em;
+            }
+            
+            .modal-close {
+                width: 35px;
+                height: 35px;
+                font-size: 24px;
+            }
+            
+            .modal-body {
+                padding: 15px;
+            }
+            
+            .info-section {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .info-section h3 {
+                font-size: 1.1em;
+            }
+            
+            .controls-grid,
+            .legend-grid,
+            .shortcuts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .step {
+                padding: 12px;
+            }
+            
+            .step-number {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+                margin-right: 12px;
+            }
+        }
+        
+        /* ============================================
+           HIDE ROTATE DEVICE OVERLAY - FULL RESPONSIVE
+           ============================================ */
+        .rotate-device-overlay {
+            display: none !important;
+        }
+
+        /* ============================================
+           TOUCH-FRIENDLY IMPROVEMENTS
+           ============================================ */
+        @media (hover: none) and (pointer: coarse) {
+            /* Larger touch targets */
+            .btn {
+                min-height: 44px;
+            }
+            
+            .mobile-nav-btn {
+                min-height: 44px;
+            }
+            
+            input[type="range"] {
+                height: 12px;
+            }
+            
+            input[type="range"]::-webkit-slider-thumb {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .participant-selector select {
+                min-height: 44px;
+            }
+            
+            .node {
+                cursor: default;
+            }
+            
+            /* Disable hover effects on touch devices */
+            .btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            
+            .node:hover {
+                transform: none;
+            }
+        }
+
+        /* ============================================
+           MOBILE LEGEND TOGGLE (for experiment area)
+           ============================================ */
+        .mobile-legend-toggle {
+            display: none;
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-legend-toggle {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+        }
+        
+        .mobile-legend {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            left: 15px;
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border: 1px solid #e2e8f0;
+            z-index: 100;
+        }
+        
+        .mobile-legend.show {
+            display: block;
+        }
+        
+        .mobile-legend h4 {
+            color: #1e40af;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .mobile-legend .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 0.75rem;
+        }
+        
+        .mobile-legend .legend-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .mobile-legend .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* ============================================
+           ACCESSIBILITY IMPROVEMENTS
+           ============================================ */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+        
+        /* Focus styles for keyboard navigation */
+        .btn:focus,
+        .mobile-nav-btn:focus,
+        select:focus,
+        input:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        
+        .modal-close:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
         }
 
 /* Quorum Tooltip Styles */
@@ -1236,4 +1680,22 @@
 .quorum-tooltip.show {
     opacity: 1;
     visibility: visible;
+}
+
+/* Mobile tooltip adjustments */
+@media (max-width: 768px) {
+    .quorum-tooltip {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        top: auto;
+        max-width: 90%;
+        white-space: normal;
+        text-align: center;
+    }
+    
+    .quorum-tooltip.show {
+        transform: translateX(-50%);
+    }
 }
