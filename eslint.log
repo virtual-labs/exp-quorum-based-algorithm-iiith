@@ -1,0 +1,31 @@
+
+/home/runner/work/exp-quorum-based-algorithm-iiith/exp-quorum-based-algorithm-iiith/experiment/simulation/script.js
+    32:27  warning  'd3' is not defined                                 no-undef
+    74:26  warning  'd3' is not defined                                 no-undef
+    75:27  warning  'd3' is not defined                                 no-undef
+    78:49  warning  'd3' is not defined                                 no-undef
+   209:27  warning  'd3' is not defined                                 no-undef
+   210:28  warning  'd3' is not defined                                 no-undef
+   211:30  warning  'd3' is not defined                                 no-undef
+   212:30  warning  'd3' is not defined                                 no-undef
+   213:33  warning  'd3' is not defined                                 no-undef
+   237:19  warning  'd3' is not defined                                 no-undef
+   350:20  warning  'event' is defined but never used                   no-unused-vars
+   350:27  warning  'd' is defined but never used                       no-unused-vars
+   396:15  warning  'requester' is assigned a value but never used      no-unused-vars
+   675:15  warning  'intersection' is assigned a value but never used   no-unused-vars
+   923:10  warning  'requestCriticalSection' is defined but never used  no-unused-vars
+   927:10  warning  'releaseCriticalSection' is defined but never used  no-unused-vars
+   931:10  warning  'simulateDeadlock' is defined but never used        no-unused-vars
+   954:10  warning  'toggleMobileLegend' is defined but never used      no-unused-vars
+   997:28  warning  'd3' is not defined                                 no-undef
+   998:29  warning  'd3' is not defined                                 no-undef
+  1001:51  warning  'd3' is not defined                                 no-undef
+  1010:10  warning  'switchTab' is defined but never used               no-unused-vars
+  1035:40  warning  'd3' is not defined                                 no-undef
+  1036:41  warning  'd3' is not defined                                 no-undef
+  1039:63  warning  'd3' is not defined                                 no-undef
+  1059:11  warning  'mobileNav' is assigned a value but never used      no-unused-vars
+
+✖ 26 problems (0 errors, 26 warnings)
+
