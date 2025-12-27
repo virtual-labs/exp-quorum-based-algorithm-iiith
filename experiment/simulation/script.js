@@ -241,7 +241,7 @@ class MaekawaSimulation {
 
         nodeEnter.append("circle")
             .attr("class", "node")
-            .attr("r", 24)
+            .attr("r", this.getNodeRadius())
             .on("click", this.nodeClicked.bind(this))
             .on("mouseenter", this.nodeMouseEnter.bind(this))
             .on("mouseleave", this.nodeMouseLeave.bind(this));
@@ -254,7 +254,8 @@ class MaekawaSimulation {
         const nodeUpdate = node.merge(nodeEnter);
 
         nodeUpdate.select(".node")
-            .attr("class", d => `node node-${d.state}`);
+            .attr("class", d => `node node-${d.state}`)
+            .attr("r", this.getNodeRadius());
 
         this.simulation.on("tick", () => {
             link.merge(linkEnter)
@@ -286,30 +287,71 @@ class MaekawaSimulation {
     }
 
     nodeClicked(event, d) {
+        // On mobile, show tooltip on click since hover doesn't work well
+        if (this.isTouchDevice()) {
+            this.showTooltip(event, d);
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                this.hideTooltip();
+            }, 3000);
+        }
         this.showMessage(`Participant ${d.id + 1} clicked - Quorum: ${this.quorumSets[d.id].map(x => x + 1).join(', ')}`);
     }
 
-    nodeMouseEnter(event, d) {
+    isTouchDevice() {
+        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    }
+
+    getNodeRadius() {
+        // Larger nodes on mobile for easier touch targets
+        if (window.innerWidth <= 768) {
+            return 28;
+        } else if (window.innerWidth <= 1024) {
+            return 26;
+        }
+        return 24;
+    }
+
+    showTooltip(event, d) {
         const tooltip = document.getElementById('quorumTooltip');
         const quorumMembers = this.quorumSets[d.id].map(x => x + 1).join(', ');
-        const quorumId = d.id + 1; // Quorum ID is same as participant ID in Maekawa's
+        const quorumId = d.id + 1;
         
-        // Update tooltip content with quorum ID and members
+        // Update tooltip content
         tooltip.querySelector('.tooltip-content').textContent = 
             `Participant ${d.id + 1} | Quorum ID: Q${quorumId} | Members: [${quorumMembers}] | Size: ${this.quorumSets[d.id].length}`;
         
-        // Position tooltip
-        const containerRect = document.getElementById('visualization').getBoundingClientRect();
-        tooltip.style.left = (event.pageX - containerRect.left + 10) + 'px';
-        tooltip.style.top = (event.pageY - containerRect.top - 30) + 'px';
+        // Position tooltip - different for mobile vs desktop
+        if (window.innerWidth <= 768) {
+            // On mobile, tooltip is fixed at bottom center via CSS
+            tooltip.style.left = '';
+            tooltip.style.top = '';
+        } else {
+            const containerRect = document.getElementById('visualization').getBoundingClientRect();
+            tooltip.style.left = (event.pageX - containerRect.left + 10) + 'px';
+            tooltip.style.top = (event.pageY - containerRect.top - 30) + 'px';
+        }
         
-        // Show tooltip
         tooltip.classList.add('show');
     }
 
-    nodeMouseLeave(event, d) {
+    hideTooltip() {
         const tooltip = document.getElementById('quorumTooltip');
         tooltip.classList.remove('show');
+    }
+
+    nodeMouseEnter(event, d) {
+        // Only show on hover for non-touch devices
+        if (!this.isTouchDevice()) {
+            this.showTooltip(event, d);
+        }
+    }
+
+    nodeMouseLeave(event, d) {
+        // Only hide on mouse leave for non-touch devices
+        if (!this.isTouchDevice()) {
+            this.hideTooltip();
+        }
     }
 
     async requestCriticalSection() {
@@ -908,6 +950,14 @@ function hideInfoModal() {
     document.getElementById('infoModal').classList.remove('show');
 }
 
+// Mobile Legend Toggle
+function toggleMobileLegend() {
+    const legend = document.getElementById('mobileLegend');
+    if (legend) {
+        legend.classList.toggle('show');
+    }
+}
+
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
     // F1 or Ctrl+H for help
@@ -952,16 +1002,85 @@ window.addEventListener('resize', () => {
             simulation.simulation.alpha(0.3).restart();
         }
     }
+    // Update mobile nav visibility based on screen size
+    updateMobileNavVisibility();
 });
 
-function checkOrientation() {
-    const overlay = document.querySelector('.rotate-device-overlay');
-    if (window.innerWidth < window.innerHeight && window.innerWidth < 768) {
-        overlay.style.display = 'flex';
-    } else {
-        overlay.style.display = 'none';
+// Mobile Tab Switching Function
+function switchTab(tabName) {
+    // Get all panels and nav buttons
+    const controlsPanel = document.querySelector('.controls-panel');
+    const experimentArea = document.querySelector('.experiment-area');
+    const observationsPanel = document.querySelector('.observations-panel');
+    const navButtons = document.querySelectorAll('.mobile-nav-btn');
+    
+    // Remove active class from all panels
+    controlsPanel.classList.remove('active');
+    experimentArea.classList.remove('active');
+    observationsPanel.classList.remove('active');
+    
+    // Remove active class from all nav buttons
+    navButtons.forEach(btn => btn.classList.remove('active'));
+    
+    // Add active class to selected panel and button
+    switch(tabName) {
+        case 'controls':
+            controlsPanel.classList.add('active');
+            break;
+        case 'visualization':
+            experimentArea.classList.add('active');
+            // Trigger resize to update SVG dimensions when switching to visualization
+            setTimeout(() => {
+                if (simulation && simulation.svg) {
+                    simulation.width = d3.select("#visualization").node().getBoundingClientRect().width;
+                    simulation.height = d3.select("#visualization").node().getBoundingClientRect().height;
+                    simulation.svg.attr("width", simulation.width).attr("height", simulation.height);
+                    if (simulation.simulation) {
+                        simulation.simulation.force("center", d3.forceCenter(simulation.width / 2, simulation.height / 2));
+                        simulation.simulation.alpha(0.3).restart();
+                    }
+                }
+            }, 50);
+            break;
+        case 'observations':
+            observationsPanel.classList.add('active');
+            break;
+    }
+    
+    // Activate the corresponding nav button
+    const activeBtn = document.querySelector(`.mobile-nav-btn[data-tab="${tabName}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
     }
 }
 
-window.addEventListener('resize', checkOrientation);
-window.addEventListener('load', checkOrientation);
+// Update mobile nav visibility based on screen size
+function updateMobileNavVisibility() {
+    const mobileNav = document.querySelector('.mobile-nav');
+    const controlsPanel = document.querySelector('.controls-panel');
+    const experimentArea = document.querySelector('.experiment-area');
+    const observationsPanel = document.querySelector('.observations-panel');
+    
+    if (window.innerWidth > 768 || (window.innerWidth <= 968 && window.innerWidth > window.innerHeight)) {
+        // Desktop or landscape mode - show all panels
+        controlsPanel.classList.remove('active');
+        experimentArea.classList.remove('active');
+        observationsPanel.classList.remove('active');
+    } else {
+        // Mobile portrait mode - ensure at least one panel is active
+        if (!controlsPanel.classList.contains('active') && 
+            !experimentArea.classList.contains('active') && 
+            !observationsPanel.classList.contains('active')) {
+            experimentArea.classList.add('active');
+            // Update nav button
+            document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.classList.remove('active'));
+            const vizBtn = document.querySelector('.mobile-nav-btn[data-tab="visualization"]');
+            if (vizBtn) vizBtn.classList.add('active');
+        }
+    }
+}
+
+// Initialize mobile nav on load
+window.addEventListener('load', () => {
+    updateMobileNavVisibility();
+});
